@@ -28,7 +28,18 @@
         },
         methods: {
             nextDigit: function (event) {
-                if ((!/^\d$/.test(event.key)) || this.numberData.length > 5) {
+                const acceptedKeys = [
+                    'Backspace',
+                    'Delete',
+                    'Left',
+                    'ArrowLeft',
+                    'Right',
+                    'ArrowRight'
+                ];
+                let acceptedKey = acceptedKeys.indexOf(event.key) >= 0;
+                if ((!/^\d$/.test(event.key)) && !acceptedKey) {
+                    event.preventDefault();
+                } else if (this.numberData.length > 5 && !acceptedKey) {
                     event.preventDefault();
                 }
             }

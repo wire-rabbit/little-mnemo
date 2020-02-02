@@ -1970,7 +1970,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     nextDigit: function nextDigit(event) {
-      if (!/^\d$/.test(event.key) || this.numberData.length > 5) {
+      var acceptedKeys = ['Backspace', 'Delete', 'Left', 'ArrowLeft', 'Right', 'ArrowRight'];
+      var acceptedKey = acceptedKeys.indexOf(event.key) >= 0;
+
+      if (!/^\d$/.test(event.key) && !acceptedKey) {
+        event.preventDefault();
+      } else if (this.numberData.length > 5 && !acceptedKey) {
         event.preventDefault();
       }
     }
