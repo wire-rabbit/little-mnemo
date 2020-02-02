@@ -21,3 +21,7 @@ Homestead.yaml
 Homestead.json
 /.vagrant
 .phpunit.result.cache
+
+# Build artifacts
+public/js/app.js
+public/css/app.css
