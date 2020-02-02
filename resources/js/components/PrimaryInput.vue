@@ -18,7 +18,7 @@
         </div>
         <div class="row justify-content-center" v-if="hasErrors">
             <div class="alert alert-danger" role="alert">
-                <span class="alert-text">Some Kind of Alert</span>
+                <span class="alert-text">{{ errorText }}</span>
                 <button type="button" class="close" aria-label="Close">
                     <span aria-hidden="true" @click="dismissAlert">&times;</span>
                 </button>
@@ -63,7 +63,8 @@
         data: function () {
             return {
                 numberData: '',
-                hasErrors: false
+                hasErrors: false,
+                errorText: 'Unknown error'
             };
         },
         methods: {
@@ -86,7 +87,10 @@
             },
             fetchWords: function () {
                 if (this.numberData.length === 0) {
+                    this.errorText = 'We need at least one number for this to work.';
                     this.hasErrors = true;
+                } else {
+                    this.$emit('fetchWords', this.numberData);
                 }
             },
             dismissAlert: function () {
