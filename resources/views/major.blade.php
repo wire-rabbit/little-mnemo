@@ -3,6 +3,6 @@
 @section('title', 'Major System')
 
 @section('content')
-<primary-input></primary-input>
+<app maxLength="10"></app>
 @endsection
 

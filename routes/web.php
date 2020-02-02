@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('major');
 });
+
+Route::post('fetch', function () {
+    return response()->json(['foo' => 'bar']);
+});
