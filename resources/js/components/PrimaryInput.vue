@@ -21,6 +21,12 @@
 
 <script>
     export default {
+        props: {
+            maxLength: {
+                type: Number,
+                default: 5
+            }
+        },
         data: function () {
             return {
                 numberData: ''
@@ -39,7 +45,7 @@
                 let acceptedKey = acceptedKeys.indexOf(event.key) >= 0;
                 if ((!/^\d$/.test(event.key)) && !acceptedKey) {
                     event.preventDefault();
-                } else if (this.numberData.length > 5 && !acceptedKey) {
+                } else if (this.numberData.length >= this.maxLength && !acceptedKey) {
                     event.preventDefault();
                 }
             }
