@@ -1958,7 +1958,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      numberData: ''
+    };
+  },
+  methods: {
+    nextDigit: function nextDigit(event) {
+      if (!/^\d$/.test(event.key) || this.numberData.length > 5) {
+        event.preventDefault();
+      }
+    }
+  },
   mounted: function mounted() {
     this.$refs.primary_input.focus();
   }
@@ -38029,7 +38045,28 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _c("textarea", { ref: "primary_input", staticClass: "primary-input" })
+    _c("textarea", {
+      directives: [
+        {
+          name: "model",
+          rawName: "v-model",
+          value: _vm.numberData,
+          expression: "numberData"
+        }
+      ],
+      ref: "primary_input",
+      staticClass: "primary-input",
+      domProps: { value: _vm.numberData },
+      on: {
+        keydown: _vm.nextDigit,
+        input: function($event) {
+          if ($event.target.composing) {
+            return
+          }
+          _vm.numberData = $event.target.value
+        }
+      }
+    })
   ])
 }
 var staticRenderFns = []

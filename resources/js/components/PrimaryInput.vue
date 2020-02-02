@@ -1,6 +1,10 @@
 <template>
     <div class="container">
-<textarea class="primary-input" ref="primary_input"></textarea>
+        <textarea v-model="numberData"
+                  class="primary-input"
+                  ref="primary_input"
+                  @keydown="nextDigit"
+        ></textarea>
     </div>
 </template>
 
@@ -17,6 +21,18 @@
 
 <script>
     export default {
+        data: function () {
+            return {
+                numberData: ''
+            };
+        },
+        methods: {
+            nextDigit: function (event) {
+                if ((!/^\d$/.test(event.key)) || this.numberData.length > 5) {
+                    event.preventDefault();
+                }
+            }
+        },
         mounted: function () {
             this.$refs.primary_input.focus();
         }
