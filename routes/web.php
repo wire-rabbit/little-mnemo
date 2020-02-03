@@ -12,5 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('major');
 });
+
+Route::post('fetch', 'MajorController');
+
