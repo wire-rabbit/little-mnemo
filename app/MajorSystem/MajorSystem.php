@@ -18,7 +18,6 @@ class MajorSystem
     {
         if (!empty($word_list)) {
             $this->wordList = $word_list;
-        } else {
         }
     }
 
@@ -54,6 +53,23 @@ class MajorSystem
         } else {
             throw new \Exception('Word list file not found.');
         }
+    }
+
+    /**
+     * Search the word list for matches and return an array of results.
+     *
+     * @param string $pattern
+     * @return array
+     */
+    public function searchWordList(string $pattern)
+    {
+        $results = [];
+        $reader = $this->getWordBatch();
+        foreach ($reader as $batch) {
+            preg_match_all($pattern, $batch, $matches);
+            $results = array_merge($results, $matches[0]);
+        }
+        return $results;
     }
 
     public function foo()

@@ -25,6 +25,12 @@ class MajorSystemTest extends TestCase
         preg_match_all('/\n/', $firstBatch, $lineMatches[0]);
         $this->assertEquals('aardvark', $matches[0]);
         $this->assertEquals(1000, count($lineMatches[0][0]));
+    }
 
+    public function testMajorSystemCanSearchForPattern()
+    {
+        $results = $this->major->searchWordList('/^chess$/m');
+        var_dump($results);
+        $this->assertTrue(in_array("chess", $results));
     }
 }
