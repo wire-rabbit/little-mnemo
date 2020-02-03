@@ -30,7 +30,18 @@ class MajorSystemTest extends TestCase
     public function testMajorSystemCanSearchForPattern()
     {
         $results = $this->major->searchWordList('/^chess$/m');
-        var_dump($results);
         $this->assertTrue(in_array("chess", $results));
+    }
+
+    public function testMajorSystemCanFormPatternFromNumber()
+    {
+        $testVals = [
+            0 => '/^[aeiouwhy]*[sz][aeiouwhy]*$/mi',
+            -5 => '/^[aeiouwhy]*l[aeiouwhy]*$/mi',
+            23 => '/^[aeiouwhy]*n[aeiouwhy]*m[aeiouwhy]*$/mi'
+        ];
+        foreach ($testVals as $number => $expectedPattern) {
+            $this->assertEquals($expectedPattern, $this->major->getPattern($number));
+        }
     }
 }

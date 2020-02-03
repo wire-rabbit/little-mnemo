@@ -9,6 +9,6 @@ class MajorController extends Controller
 {
     public function __invoke(MajorSystem $maj)
     {
-        return json_encode($maj->foo());
+        return json_encode($maj->getMatches(23));
     }
 }
