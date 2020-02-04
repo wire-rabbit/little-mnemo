@@ -69,6 +69,11 @@
         },
         methods: {
             nextDigit: function (event) {
+                if (event.key == 'Enter') {
+                    this.fetchWords();
+                    event.preventDefault();
+                    return;
+                }
                 const acceptedKeys = [
                     'Backspace',
                     'Delete',
