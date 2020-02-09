@@ -42,18 +42,18 @@ class MajorSystem
      *
      * @throws \Exception
      */
-    public function getWordBatch(int $batchSize = 1000)
+    public function getWordBatch(int $batchSize = 1001)
     {
         $batchValue = '';
         $path = storage_path('app/words.txt');
         if (file_exists($path)) {
             $handle = fopen($path, 'r');
-            $count = 0;
+            $count = 1;
             while (!feof($handle)) {
                 $nextLine = fgets($handle);
                 $count++;
                 if ($nextLine === false || $count === $batchSize) {
-                    $count = 0;
+                    $count = 1;
                     if (is_string($nextLine)) {
                         $batchValue .= $nextLine;
                     }
@@ -80,8 +80,12 @@ class MajorSystem
         $results = [];
         $reader = $this->getWordBatch();
         foreach ($reader as $batch) {
-            preg_match_all($pattern, $batch, $matches);
-            $results = array_merge($results, $matches[0]);
+            $matchCount = preg_match_all($pattern, $batch, $matches);
+            if ($matchCount > 0) {
+                foreach ($matches[0] as $match) {
+                    $results[] = $match;
+                }
+            }
         }
         return $results;
     }
@@ -111,9 +115,65 @@ class MajorSystem
      */
     public function getMatches(int $number)
     {
-        $pattern = $this->getPattern($number);
-        $results = $this->searchWordList($pattern);
-        return $results;
-    }
+        // We need to be able to combine chunks of numbers as lists of words
+        $wordLists = [];
+        $createWordList = function (array $numberParts) use (&$createWordList, &$wordLists) {
+            foreach ($numberParts as $number) {
+                $pattern = $this->getPattern(intval($number));
+                $results = $this->searchWordList($pattern);
+                if (empty($results)) {
+                    // If no result was found, the number was too large. We will break it into two
+                    // chunks and process each separately:
+                    $strNumber = strval($number);
+                    if (strlen($strNumber) > 1) {
+                        $pieces = str_split($strNumber);
+                        $left = intval(implode(array_slice($pieces, 0, floor(count($pieces)/2))));
+                        $right = intval(implode(array_slice($pieces, floor(count($pieces)/2))));
+                        $createWordList([$left, $right]);
+                    }
+                } else {
+                    // If a result was found, these results can simply be added:
+                    $wordLists[$number] = $results;
+                }
+            }
+        };
 
+        $createWordList([$number]);
+
+        // Now combine one result from each array dimension into a single string.
+        // First, get information about each dimension:
+        $loopValues = [];
+        $largest = 0;
+        $largestKey = '';
+        foreach (array_keys($wordLists) as $numberPiece) {
+            $size = count($wordLists[$numberPiece]);
+            if ($size > $largest) {
+                $largest = $size;
+                $largestKey = $numberPiece;
+            }
+            $loopValues[] = [
+                'key' => $numberPiece,
+                'size' => $size,
+                'current' => 0,
+            ];
+        }
+
+        // Next, loop over each dimension, using the largest as the max output
+        // (it would be less helpful to do a cartesian product of all dimensions).
+        // Smaller dimensions just cycle through.
+        $result = [];
+        for ($i = 0; $i < count($wordLists[$largestKey]); $i++) {
+            $nextResult = '';
+            foreach ($loopValues as &$loop) {
+                $nextResult .= ' ' . $wordLists[$loop['key']][$loop['current']];
+                $loop['current']++;
+                if ($loop['current'] === $loop['size']) {
+                    $loop['current'] = 0;
+                }
+            }
+            $result[] = trim($nextResult);
+        }
+
+        return $result;
+    }
 }
