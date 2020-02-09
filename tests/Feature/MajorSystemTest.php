@@ -44,4 +44,20 @@ class MajorSystemTest extends TestCase
             $this->assertEquals($expectedPattern, $this->major->getPattern($number));
         }
     }
+
+    public function testMajorSystemBreaksUpLongNumbers()
+    {
+        // An array of numbers that are too long/repetitive for a single
+        // word result:
+        $testVals = [
+            123456789,
+        ];
+        foreach ($testVals as $number) {
+            // A result should *always* be returned, so pop should never fail
+            $list = $this->major->getMatches($number);
+            $result = array_pop($list);
+            // We expect multiple words for these test values:
+            $this->assertGreaterThan(1, str_word_count($result));
+        }
+    }
 }
