@@ -45,7 +45,7 @@ class MajorSystem
     public function getWordBatch(int $batchSize = 1001)
     {
         $batchValue = '';
-        $path = storage_path('app/words.txt');
+        $path = storage_path('app/nounlist.txt');
         if (file_exists($path)) {
             $handle = fopen($path, 'r');
             $count = 1;
