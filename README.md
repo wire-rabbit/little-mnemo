@@ -6,7 +6,7 @@ This is a simple app that assists in the memorization of numbers. It takes an in
 
 It's built using PHP, Laravel 6, and Vue, and is currently deployed at: [https://wr-little-major-demo.herokuapp.com/](https://wr-little-major-demo.herokuapp.com/)
 
-The word list used is from: [https://github.com/dwyl/english-words](https://github.com/dwyl/english-words)
+The word list used is from: [http://www.desiquintans.com/nounlist](http://www.desiquintans.com/nounlist)
  
 ## Setup
 
