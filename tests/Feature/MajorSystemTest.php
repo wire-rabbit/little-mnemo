@@ -51,13 +51,18 @@ class MajorSystemTest extends TestCase
         // word result:
         $testVals = [
             123456789,
+            333333333,
         ];
         foreach ($testVals as $number) {
-            // A result should *always* be returned, so pop should never fail
-            $list = $this->major->getMatches($number);
-            $result = array_pop($list);
+            // A result should *always* be returned, so we expect no out of
+            // bounds error here:
+            $result = ($this->major->getMatches($number))[0];
+            //$result = array_pop($list);
             // We expect multiple words for these test values:
             $this->assertGreaterThan(1, str_word_count($result));
         }
+        // And a small number should result in a single word:
+        $simpleResult = ($this->major->getMatches(8))[0];
+        $this->assertEquals(1, str_word_count($simpleResult));
     }
 }
